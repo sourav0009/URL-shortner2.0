@@ -101,6 +101,10 @@ export default function Home() {
           </div>
         </form>
       </div>
+      <div className="mt-10 ml-80 text-black text-center bg-gray-200 p-40 max-w-4xl rounded-lg">
+        {/* Your content here */}
+        <p>This is a new container.</p>
+      </div>
       <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
           <div className="sm:flex sm:items-center sm:justify-between">
