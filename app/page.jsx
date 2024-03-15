@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useState } from "react";
 import NextTopLoader from "nextjs-toploader";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export default function Home() {
   const [dropdown, setDropdown] = useState(false);
@@ -10,7 +10,6 @@ export default function Home() {
   const openDropdown = useCallback(() => {
     setDropdown((prevState) => !prevState);
   }, []);
-
   const successGenerate = useCallback(async () => {
     if (generate) {
       console.log("Generating");
@@ -38,9 +37,9 @@ export default function Home() {
       });
     }
   }, []);
-
   return (
     <>
+      <ToastContainer />
       <NextTopLoader />
       <nav className="bg-white border-gray-200 dark:bg-gray-900 relative">
         {" "}
@@ -121,7 +120,7 @@ export default function Home() {
               <span className="sr-only">Open main menu</span>
               <svg
                 className="w-5 h-5"
-                aria-hidden="true"
+                ariaHidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 17 14"
@@ -200,6 +199,87 @@ export default function Home() {
             </div>
           </div>
         </form>
+      </div>
+      <div className="border rounded-md flex max-w-3xl mt-16 ml-96 min-h-40 max-h-80 bg-slate-700">
+        <p className="p-3 text-gray-300">
+          https://github/facebook/react/blob/master
+        </p>
+        <button
+          className="text-gray-900 h-fit mt-2 dark:text-gray-400 hover:bg-gray-100  dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border"
+        >
+          <span id="default-message" className="inline-flex items-center">
+            <svg
+              className="w-3 h-3 me-1.5"
+              ariaHidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 18 20"
+            >
+              <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+            </svg>
+            <span className="text-xs font-semibold">Copy</span>
+          </span>
+          <span id="success-message" className="hidden items-center">
+            <svg
+              className="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
+              ariaHidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 16 12"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 5.917 5.724 10.5 15 1.5"
+              />
+            </svg>
+            <span className="text-xs font-semibold text-blue-700 dark:text-blue-500">
+              Copied
+            </span>
+          </span>
+        </button>
+      </div>
+      <div className="flex mt-20 items-center justify-center">
+        <div className="mr-10">
+          <img className="h-20 ml-16 rounded-full" src="https://png.pngtree.com/png-clipart/20210309/original/pngtree-thumbs-up-icon-png-image_5820943.jpg" alt="Statistics Icon" />
+          <h3 className="font-bold pl-20">Easy</h3>
+          <p className=""> ShortURL is easy and fast,
+          </p>
+        </div>
+        <div className="mr-10">
+          <img className="h-20 ml-20 rounded-full" src="https://static.vecteezy.com/system/resources/previews/010/737/931/non_2x/broken-chain-icon-eps-10-free-vector.jpg" alt="Statistics Icon" />
+          <h3 className="font-bold pl-20">Shortened</h3>
+          <p className="">Use any link, no matter what size
+          </p>
+        </div>
+        <div>
+          <img className="h-20 ml-8 rounded-full" src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-shield-safe-line-icon-vector-png-image_5175136.jpg" alt="Statistics Icon" />
+          <h3 className="font-bold pl-10">Secure</h3>
+          <p className="">It is fast and secure
+          </p>
+        </div>
+      </div>
+      <div className="flex mt-20 items-center justify-center">
+        <div className="mr-10">
+          <img className="h-20 ml-16 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyGnUa_zixC3zGRhy4I1wRk0fDsRnfv3GEtg&usqp=CAU" alt="Statistics Icon" />
+          <h3 className="font-bold pl-16">Statistics</h3>
+          <p className="">Check the clicks of received</p>
+          <p className="pl-10"> shortened URL </p>
+        </div>
+        <div className="mr-10">
+          <img className="h-20 ml-28 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOTyE3OFA-N4n8MhAMrCRszqPHR-nWZ9nKxw&usqp=CAU" alt="Statistics Icon" />
+          <h3 className="font-bold pl-28">Reliable</h3>
+          <p className="">All links that try to disseminate spam,</p>
+          <p className="pl-5">viruses and malware are deleted</p>
+        </div>
+        <div>
+          <img className="h-20 ml-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTahvC_1iXzH4ZmxuU5GMTJDpvOum4pBpHwzw&usqp=CAU" alt="Statistics Icon" />
+          <h3 className="font-bold pl-20">Devices</h3>
+          <p className="">Compatible with smartphones</p>
+          <p className="pl-10">tablets and desktop</p>
+        </div>
       </div>
       <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">

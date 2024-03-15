@@ -3,6 +3,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import NextTopLoader from "nextjs-toploader";
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
