@@ -245,8 +245,7 @@ export default function Home() {
         <div className="mr-10">
           <img className="h-20 ml-16 rounded-full" src="https://png.pngtree.com/png-clipart/20210309/original/pngtree-thumbs-up-icon-png-image_5820943.jpg" alt="Statistics Icon" />
           <h3 className="font-bold pl-20">Easy</h3>
-          <p className=""> ShortURL is easy and fast,
-          </p>
+          <p className=""> ShortURL is easy and fast,</p>
         </div>
         <div className="mr-10">
           <img className="h-20 ml-20 rounded-full" src="https://static.vecteezy.com/system/resources/previews/010/737/931/non_2x/broken-chain-icon-eps-10-free-vector.jpg" alt="Statistics Icon" />
@@ -257,8 +256,7 @@ export default function Home() {
         <div>
           <img className="h-20 ml-8 rounded-full" src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-shield-safe-line-icon-vector-png-image_5175136.jpg" alt="Statistics Icon" />
           <h3 className="font-bold pl-10">Secure</h3>
-          <p className="">It is fast and secure
-          </p>
+          <p className="">It is fast,secure and </p>
         </div>
       </div>
       <div className="flex mt-20 items-center justify-center">
@@ -271,14 +269,14 @@ export default function Home() {
         <div className="mr-10">
           <img className="h-20 ml-28 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOTyE3OFA-N4n8MhAMrCRszqPHR-nWZ9nKxw&usqp=CAU" alt="Statistics Icon" />
           <h3 className="font-bold pl-28">Reliable</h3>
-          <p className="">All links that try to disseminate spam,</p>
-          <p className="pl-5">viruses and malware are deleted</p>
+          <p className="">links that try to disseminate spam</p>
+          <p className="pl-5"></p>
         </div>
         <div>
-          <img className="h-20 ml-20 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTahvC_1iXzH4ZmxuU5GMTJDpvOum4pBpHwzw&usqp=CAU" alt="Statistics Icon" />
-          <h3 className="font-bold pl-20">Devices</h3>
-          <p className="">Compatible with smartphones</p>
-          <p className="pl-10">tablets and desktop</p>
+          <img className="h-20 ml-10 rounded-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTahvC_1iXzH4ZmxuU5GMTJDpvOum4pBpHwzw&usqp=CAU" alt="Statistics Icon" />
+          <h3 className="font-bold pl-10">Devices</h3>
+          <p className="">Compatible with Devices</p>
+          {/* <p className="pl-10">tablets and desktop</p> */}
         </div>
       </div>
       <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">
