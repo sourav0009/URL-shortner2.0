@@ -1,16 +1,26 @@
 "use client";
+import React from "react";
 import { useCallback, useState } from "react";
 import NextTopLoader from "nextjs-toploader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 export default function Home() {
     const [dropdown, setDropdown] = useState(false);
-    const [generate, setGenerate] = useState(false);
 
     const openDropdown = useCallback(() => {
         setDropdown((prevState) => !prevState);
     }, []);
+
+    const data = [
+        { originalUrl: "https://example.com/very-long-url-that-needs-shortening", shortUrl: "https://short.url/abc123", created: "2024-03-16" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        { originalUrl: "https://another-example.com/another-long-url", shortUrl: "https://short.url/def456", created: "2024-03-15" },
+        // Add more data as needed
+    ];
 
     return (
         <>
@@ -28,7 +38,7 @@ export default function Home() {
                             alt="Flowbite Logo"
                         />
                         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                            URL Shortner
+                            URL Shortener
                         </span>
                     </a>
                     <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
@@ -133,12 +143,51 @@ export default function Home() {
 
             {/* Container under navbar */}
             <div className="flex justify-center mt-4">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-6">
                     Links
                 </button>
                 <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2">
                     QR Code
                 </button>
+            </div>
+
+            {/* Table Section */}
+            <div className="overflow-x-auto mt-10 m-10 rounded-md">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 font-extrabold py-3 text-left text-md text-gray-500 uppercase tracking-wider">
+                                Original URL
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider">
+                                Short URL
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider">
+                                Created
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className=" bg-gray-500 divide-y divide-gray-200">
+                        {data.map((item, index) => (
+                            <tr key={index}>
+                                <td className="px-6 py-4 whitespace-nowrap">{item.originalUrl}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{item.shortUrl}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">{item.created}</td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
+                                        Copy
+                                    </button>
+                                    <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
             <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">
@@ -154,7 +203,7 @@ export default function Home() {
                                 alt="Flowbite Logo"
                             />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                                URL Shortner
+                                URL Shortener
                             </span>
                         </a>
                         <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">

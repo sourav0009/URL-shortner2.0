@@ -1,11 +1,19 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import NextTopLoader from "nextjs-toploader";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 export default function Home() {
   const [dropdown, setDropdown] = useState(false);
   const [generate, setGenerate] = useState(false);
+  const { data: session } = useSession();
+
+  const [imgurl, setImgUrl] = useState(null);
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
 
   const openDropdown = useCallback(() => {
     setDropdown((prevState) => !prevState);
@@ -37,6 +45,7 @@ export default function Home() {
       });
     }
   }, []);
+
   return (
     <>
       <ToastContainer />
@@ -69,8 +78,8 @@ export default function Home() {
               <span className="sr-only">Open user menu</span>
               <img
                 className="w-8 h-8 rounded-full"
-                src="https://play-lh.googleusercontent.com/LeX880ebGwSM8Ai_zukSE83vLsyUEUePcPVsMJr2p8H3TUYwNg-2J_dVMdaVhfv1cHg"
-                alt="user photo"
+                src={imgurl}
+                alt="https://e7.pngegg.com/pngimages/136/22/png-clipart-user-profile-computer-icons-girl-customer-avatar-angle-heroes.png"
               />
             </button>
             {/* Dropdown menu */}
@@ -83,10 +92,10 @@ export default function Home() {
                 {/* Adjust top value */}
                 <div className="px-4 py-3">
                   <span className="block text-sm text-gray-900 dark:text-white">
-                    Bonnie Green
+                    {name}
                   </span>
                   <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                    {email}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
@@ -100,6 +109,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
+                      onClick={() => signOut()}
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
@@ -205,12 +215,12 @@ export default function Home() {
           https://github/facebook/react/blob/master
         </p>
         <button
-          className="text-gray-900 h-fit mt-2 dark:text-gray-400 hover:bg-gray-100  dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border"
+          className="text-gray-900 h-fit dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border"
         >
           <span id="default-message" className="inline-flex items-center">
             <svg
-              className="w-3 h-3 me-1.5"
-              ariaHidden="true"
+              classname="w-3 h-3 me-1.5"
+              aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
               viewBox="0 0 18 20"
@@ -221,7 +231,7 @@ export default function Home() {
           </span>
           <span id="success-message" className="hidden items-center">
             <svg
-              className="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
+              classname="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
               ariaHidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
