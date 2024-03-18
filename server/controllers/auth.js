@@ -8,7 +8,15 @@ const { URL, UserModel } = require("../models/url");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
+const cloudinary = require("cloudinary").v2;
 dotenv.config({ path: "../.env" });
+
+const secretKey = process.env.JWT_SECRET;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 async function login(req, res) {
   const { email, password } = req.body;
@@ -36,8 +44,9 @@ async function login(req, res) {
   }
 }
 async function register(req, res) {
-  require("events").EventEmitter.defaultMaxListeners = 15;
   const { username, email, password } = req.body;
+  let avatar = null;
+  console.log(username, email, password);
   try {
     if (!isPasswordComplex(password)) {
       return res.status(400).json({
@@ -46,23 +55,24 @@ async function register(req, res) {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    cloudinary.uploader.upload(req.file.path, async function (err, result) {
-      if (err) {
-        console.error("Cloudinary upload failed:", err);
-        return res
-          .status(500)
-          .json({ message: "Cloudinary upload failed", error: err });
-      }
-      const avatar = result.url;
-      const newUser = new UserModel({
-        username,
-        email,
-        password: hashedPassword,
-        avatar,
-      });
-      await newUser.save();
-      createAndSendToken(newUser, 201, res);
+    try {
+      if (req.file && req.file.path) {
+        // Upload image to cloudinary
+    
+        const result = await cloudinary.uploader.upload(req.file.path);
+        avatar = result.url; // Set avatarUrl to the uploaded image URL
+    }
+    } catch {
+      throw new Error("No profile picture found, setup failed.");
+    }
+    const newUser = new UserModel({
+      username,
+      email,
+      password: hashedPassword,
+      avatar,
     });
+    await newUser.save();
+    createAndSendToken(newUser, 201, res);
   } catch (error) {
     console.log("Failed to save:", error);
     return res

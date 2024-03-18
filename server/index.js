@@ -5,12 +5,13 @@ const router = require("./routes/url");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
-const URL = require("./models/url");
+const { URL, UserModel } = require("./models/url");
 
 dotenv.config({ path: "../.env" });
+const app = express();
 const PORT = process.env.PORT;
 const DB = process.env.db;
-const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -23,8 +24,8 @@ mongoose
   .catch((error) => {
     console.error("Database connection failed", error);
   });
-app.use("/", router);
-app.get("/:shortId", async (req, res) => {
+
+app.get("/redirect/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
     {
@@ -40,6 +41,8 @@ app.get("/:shortId", async (req, res) => {
   );
   res.redirect(entry.redirectURL);
 });
+
+app.use("/", router);
 app.listen(PORT, () => {
   console.log(`Server listening from http://localhost:${PORT}`);
 });
