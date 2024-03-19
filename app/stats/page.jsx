@@ -1,14 +1,53 @@
 "use client";
-import React from "react";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 import NextTopLoader from "nextjs-toploader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import cookie from "js-cookie";
+import Cookies from "js-cookie";
+
 export default function Home() {
+  const { data: session } = useSession();
+
   const [dropdown, setDropdown] = useState(false);
+  const [imgurl, setImgUrl] = useState(null);
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
 
   const openDropdown = useCallback(() => {
     setDropdown((prevState) => !prevState);
+  }, []);
+
+  const logout = async () => {
+    Cookies.remove("cookie-1");
+    router.push("/");
+  };
+
+  const getDetails = useCallback(async () => {
+    try {
+      const token = cookie.get("cookie-1");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_DOMAIN}/decode`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        }
+      );
+      if (!response.ok) {
+        console.error("Cannot get avatar");
+      } else {
+        const data = await response.json();
+        setImgUrl(data.username.avatar);
+        setEmail(data.username.email);
+        setName(data.username.username);
+      }
+    } catch (error) {
+      console.error("Server", error);
+    }
   }, []);
 
   const data = [
@@ -27,34 +66,25 @@ export default function Home() {
       shortUrl: "https://short.url/def456",
       created: "2024-03-15",
     },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-    // Add more data as needed
   ];
+  useEffect(() => {
+    if (session && session.user && session.user.image) {
+      setEmail(session.user.email);
+      setImgUrl(session.user.image);
+      setName(session.user.name);
+    }
+  }, [session]);
+
+  useEffect(() => {
+    getDetails();
+  }, []);
 
   return (
     <>
       <ToastContainer />
       <NextTopLoader />
       <nav className="bg-white border-gray-200 dark:bg-gray-900 relative">
+        {" "}
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
           <a
             href="/"
@@ -66,10 +96,11 @@ export default function Home() {
               alt="Flowbite Logo"
             />
             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-              URL Shortener
+              URL Shortner
             </span>
           </a>
           <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse relative">
+            {" "}
             <button
               type="button"
               className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -80,21 +111,24 @@ export default function Home() {
               <span className="sr-only">Open user menu</span>
               <img
                 className="w-8 h-8 rounded-full"
-                src="https://play-lh.googleusercontent.com/LeX880ebGwSM8Ai_zukSE83vLsyUEUePcPVsMJr2p8H3TUYwNg-2J_dVMdaVhfv1cHg"
-                alt="user photo"
+                src={imgurl}
+                alt="https://e7.pngegg.com/pngimages/136/22/png-clipart-user-profile-computer-icons-girl-customer-avatar-angle-heroes.png"
               />
             </button>
+            {/* Dropdown menu */}
             {dropdown && (
               <div
                 className="absolute top-full right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                 id="user-dropdown"
               >
+                {" "}
+                {/* Adjust top value */}
                 <div className="px-4 py-3">
                   <span className="block text-sm text-gray-900 dark:text-white">
-                    Bonnie Green
+                    {name}
                   </span>
                   <span className="block text-sm text-gray-500 truncate dark:text-gray-400">
-                    name@flowbite.com
+                    {email}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
@@ -108,6 +142,7 @@ export default function Home() {
                   </li>
                   <li>
                     <a
+                      onClick={() => signOut() && logout()}
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                     >
@@ -117,6 +152,7 @@ export default function Home() {
                 </ul>
               </div>
             )}
+            {/* Mobile menu button */}
             <button
               data-collapse-toggle="navbar-user"
               type="button"
@@ -142,6 +178,7 @@ export default function Home() {
               </svg>
             </button>
           </div>
+          {/* Main menu */}
           <div
             className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
             id="navbar-user"
@@ -150,7 +187,7 @@ export default function Home() {
               <li>
                 <a
                   href="/"
-                  className="block py-2 px-3 text-white hover:bg-gray-100 md:hover:bg-transparent rounded md:hover:text-blue-700 md:p-0 "
+                  className="block py-2 px-3 mr-7 text-white  rounded md:bg-transparent md:p-0 md:hover:text-blue-700"
                   aria-current="page"
                 >
                   Home
@@ -159,9 +196,25 @@ export default function Home() {
               <li>
                 <a
                   href="/stats"
-                  className="block py-2 px-3 text-gray-900 rounded md:bg-transparent md:text-blue-700   md:dark:text-blue-500 md:p-0 dark:text-white bg-blue-700 md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                  className="block py-2 px-3 mr-7 rounded hover:bg-gray-100 md:hover:bg-transparent text-blue-500  md:p-0 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
                   Stats
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/stats"
+                  className="block py-2 px-3 mr-7 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/stats"
+                  className="block py-2 px-3 mr-7 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  About
                 </a>
               </li>
             </ul>
@@ -169,21 +222,15 @@ export default function Home() {
         </div>
       </nav>
 
-        <nav className="mt-7">
-          <ul className="flex justify-center items-center">
-            <li className="mr-20 font-sans font-bold text-xl text-yellow-500 cursor-pointer ">Link</li>
-            <li className="font-sans font-semibold text-xl  hover:text-yellow-500 cursor-pointer">QR code</li>
-          </ul>
-        </nav>
       {/* Container under navbar */}
-      {/* <div className="flex justify-center mt-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-6 hover:underline">
+      <div className="flex justify-center mt-4">
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-6">
           Links
         </button>
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2">
           QR Code
         </button>
-      </div> */}
+      </div>
 
       {/* Table Section */}
       <div  className="overflow-x-auto mt-10 m-10 rounded-md bg-transparent">
