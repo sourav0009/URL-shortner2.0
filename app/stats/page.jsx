@@ -60,6 +60,7 @@ export default function Home() {
       originalUrl: "https://another-example.com/another-long-url",
       shortUrl: "https://short.url/def456",
       created: "2024-03-15",
+      QRCode: "",
     },
     {
       originalUrl: "https://another-example.com/another-long-url",
@@ -222,68 +223,77 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Container under navbar */}
-      <div className="flex justify-center mt-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-6">
-          Links
-        </button>
-        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2">
-          QR Code
-        </button>
+      {/* Table Section */}
+      <div className="overflow-x-auto mt-10 m-10 rounded-md">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th
+                scope="col"
+                className="px-6 font-extrabold py-3 text-left text-md text-gray-500 uppercase tracking-wider"
+              >
+                Original URL
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+              >
+                Short URL
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+              >
+                QR Code
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+              >
+                Created
+              </th>
+              <th
+                scope="col"
+                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+              >
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-gray-500 divide-y divide-gray-200">
+            {data.map((item, index) => (
+              <tr key={index}>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {item.originalUrl}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">{item.shortUrl}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24"
+                    viewBox="0 -960 960 960"
+                    width="24"
+                  >
+                    <path d="M520-120v-80h80v80h-80Zm-80-80v-200h80v200h-80Zm320-120v-160h80v160h-80Zm-80-160v-80h80v80h-80Zm-480 80v-80h80v80h-80Zm-80-80v-80h80v80h-80Zm360-280v-80h80v80h-80ZM180-660h120v-120H180v120Zm-60 60v-240h240v240H120Zm60 420h120v-120H180v120Zm-60 60v-240h240v240H120Zm540-540h120v-120H660v120Zm-60 60v-240h240v240H600Zm80 480v-120h-80v-80h160v120h80v80H680ZM520-400v-80h160v80H520Zm-160 0v-80h-80v-80h240v80h-80v80h-80Zm40-200v-160h80v80h80v80H400Zm-190-90v-60h60v60h-60Zm0 480v-60h60v60h-60Zm480-480v-60h60v60h-60Z" />
+                  </svg>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">{item.created}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
+                    Copy
+                  </button>
+                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
       </div>
 
-      {/* Table Section */}
-      <div  className="overflow-x-auto mt-10 m-10 rounded-md bg-transparent">
-      <table className="min-w-full divide-y divide-gray-200 ">
-        <thead className="bg-gray-50">
-          <tr>
-            <th
-              scope="col"
-              className="px-6 font-extrabold py-3 text-left text-md text-gray-500 uppercase tracking-wider"
-            >
-              Original URL
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
-            >
-              Short URL
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
-            >
-              Created
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
-            >
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody className="bg-gray-500 divide-y divide-gray-200">
-          {data.map((item, index) => (
-            <tr key={index}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                {item.originalUrl}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.shortUrl}</td>
-              <td className="px-6 py-4 whitespace-nowrap">{item.created}</td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
-                  Copy
-                </button>
-                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div >
+
 
 
       <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">

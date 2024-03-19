@@ -82,7 +82,7 @@ export default function Home() {
         console.log("User details can't not sent");
       }
     } catch {
-      console.log("Sending user details failed server error", error);
+      console.log("Sending user details failed server error",);
     }
   }, [email, name]);
 
@@ -134,17 +134,19 @@ export default function Home() {
         setImgUrl(data.username.avatar);
         setEmail(data.username.email);
         setName(data.username.username);
+        console.log(imgurl)
       }
     } catch (error) {
       console.log("User details fetching failed ", error);
     }
-  }, []);
+  }, [imgurl,name,email]);
 
   useEffect(() => {
     if (session && session.user && session.user.image) {
       setEmail(session.user.email);
       setImgUrl(session.user.image);
       setName(session.user.name);
+      console.log(session.user)
     } else {
       toggleModal();
     }
@@ -156,7 +158,7 @@ export default function Home() {
 
   useEffect(() => {
     getDetails();
-  }, []);
+  }, [imgurl,name,email]);
 
   return (
     <>
