@@ -96,25 +96,8 @@ export default function Home() {
     } catch (error) {
       console.error("Server", error);
     }
-  }, []);
+  }, [email, name, imgurl]);
 
-  const data = [
-    {
-      originalUrl: "https://example.com/very-long-url-that-needs-shortening",
-      shortUrl: "https://short.url/abc123",
-      created: "2024-03-16",
-    },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-    {
-      originalUrl: "https://another-example.com/another-long-url",
-      shortUrl: "https://short.url/def456",
-      created: "2024-03-15",
-    },
-  ];
   useEffect(() => {
     if (session && session.user && session.user.image) {
       setEmail(session.user.email);
@@ -350,52 +333,209 @@ export default function Home() {
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >
-                Original URL
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+                <path d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm3.982 13.982a1 1 0 0 1-1.414 0l-3.274-3.274A1.012 1.012 0 0 1 9 10V6a1 1 0 0 1 2 0v3.586l2.982 2.982a1 1 0 0 1 0 1.414Z" />
+              </svg>
+              Last 30 days
+              <svg
+                className="w-2.5 h-2.5 ms-2.5"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 10 6"
               >
-                Short URL
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 4 4 4-4"
+                />
+              </svg>
+            </button>
+            {/* Dropdown menu */}
+            <div
+              id="dropdownRadio"
+              className="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+              data-popper-reference-hidden=""
+              data-popper-escaped=""
+              data-popper-placement="top"
+              style={{
+                position: "absolute",
+                inset: "auto auto 0px 0px",
+                margin: "0px",
+                transform: "translate3d(522.5px, 3847.5px, 0px)",
+              }}
+            >
+              <ul
+                className="p-3 space-y-1 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownRadioButton"
               >
-                Created
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
+                <li>
+                  <div className="flex items-center p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-600">
+                    <input
+                      id="filter-radio-example-1"
+                      type="radio"
+                      value=""
+                      name="filter-radio"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
+                    <label
+                      htmlFor="filter-radio-example-1"
+                      className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"
+                    >
+                      Last day
+                    </label>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <label htmlFor="table-search" className="sr-only">
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+              <svg
+                className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                Action
-              </th>
-            </tr>
-          </thead>
-          <tbody className=" bg-gray-500 divide-y divide-gray-200">
-            {data.map((item, index) => (
-              <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.originalUrl}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.shortUrl}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{item.created}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
-                    Copy
-                  </button>
-                  <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mx-2">
-                    Delete
-                  </button>
-                </td>
+                <path
+                  fillRule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="table-search"
+              className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Search for items"
+            />
+          </div>
+        </div>
+        {data ? (
+          <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  Original URL
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Short URL
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  QR Code
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Created At
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Clicks
+                </th>
+                <th scope="col" className="px-20 py-3">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data.shortId.map((shortId, index) => (
+                <tr
+                  key={shortId}
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                >
+                  <td className="px-6 py-4">{data.redirectURL[index]}</td>
+                  <td className="px-6 py-4">{`https://yourdomain.com/${shortId}`}</td>
+                  <td className="px-6 py-4">
+                    <img
+                      src={data.qrCodeUrl[index]}
+                      alt={`QR Code for ${shortId}`}
+                      className="w-8 h-8"
+                    />
+                  </td>
+                  <td className="px-6 py-4">10/12/2024</td>
+                  <td className="px-6 py-4">97</td>
+                  <td className="px-6 py-4">
+                    <button
+                      className="mt-2 text-gray-900 h-fit dark:text-gray-400 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 rounded-lg py-2 px-2.5 inline-flex items-center justify-center bg-white border-gray-200 border"
+                      type="button"
+                    >
+                      <span
+                        onClick={toggleCopy}
+                        id="default-message"
+                        className="inline-flex items-center"
+                      >
+                        <svg
+                          className="w-3 h-3 me-1.5"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 18 20"
+                        >
+                          <path d="M16 1h-3.278A1.992 1.992 0 0 0 11 0H7a1.993 1.993 0 0 0-1.722 1H2a2 2 0 0 0-2 2v15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2Zm-3 14H5a1 1 0 0 1 0-2h8a1 1 0 0 1 0 2Zm0-4H5a1 1 0 0 1 0-2h8a1 1 0 1 1 0 2Zm0-5H5a1 1 0 0 1 0-2h2V2h4v2h2a1 1 0 1 1 0 2Z" />
+                        </svg>
+                        <span className="text-xs font-semibold">Copy</span>
+                      </span>
+                      <span
+                        id="success-message"
+                        className={
+                          !copied
+                            ? "hidden items-center"
+                            : "inline-flex items-center"
+                        }
+                      >
+                        <svg
+                          className="w-3 h-3 text-blue-700 dark:text-blue-500 me-1.5"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 16 12"
+                        >
+                          <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M1 5.917 5.724 10.5 15 1.5"
+                          />
+                        </svg>
+                        <span className="text-xs font-semibold text-blue-700 dark:text-blue-500">
+                          Copied
+                        </span>
+                      </span>
+                    </button>
+                    <button
+                      className="mt-2  text-gray-900 h-fit dark:text-gray-400 dark:bg-gray-800 hover:text-white text-xs rounded-lg py-2 px-2.5 inline-flex font-semibold ml-3 items-center justify-center bg-white border-gray-500 border hover:bg-red-500"
+                      onClick={openDeletePopup}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 me-1.5"
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="p-3 text-gray-400">No records found</p>
+        )}
       </div>
-
-
-
 
       <footer className="bg-white rounded-lg mt-96 shadow dark:bg-gray-900 ">
         <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
