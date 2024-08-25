@@ -10,10 +10,24 @@ import Cookies from "js-cookie";
 export default function Home() {
   const { data: session } = useSession();
 
+  // const [copiedUrl, setCopiedUrl] = useState("");
   const [dropdown, setDropdown] = useState(false);
   const [imgurl, setImgUrl] = useState(null);
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
+  const [copied, setCopied] = useState(false);
+  const [deletePopup, setDeletePopup] = useState(false);
+  const [data, setData] = useState(null);
+
+  // const handleCopy = (shortUrl) => {
+  //   navigator.clipboard.writeText(shortUrl);
+  //   setCopiedUrl(shortUrl);
+  //   setTimeout(() => setCopiedUrl(''), 2000); // Reset copied URL after 2 seconds
+  // };
+
+  const openDeletePopup = useCallback(() => {
+    setDeletePopup((prevState) => !prevState);
+  }, []);
 
   const openDropdown = useCallback(() => {
     setDropdown((prevState) => !prevState);
@@ -23,6 +37,40 @@ export default function Home() {
     Cookies.remove("cookie-1");
     router.push("/");
   };
+
+  const toggleCopy = () => {
+    const copyButton = document.getElementById("default-message");
+    const copiedButton = document.getElementById("success-message");
+    copyButton.classList.add("hidden");
+    copiedButton.classList.remove("hidden");
+    setCopied(true);
+    setTimeout(() => {
+      copyButton.classList.remove("hidden");
+      copiedButton.classList.add("hidden");
+      setCopied(false);
+    }, 3000);
+  };
+
+  const getUrls = useCallback(async () => {
+    try {
+      const response = await fetch("http://localhost:8010/geturl", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      if (!response.ok) {
+        console.log("Fetching failed");
+      } else {
+        const Data = await response.json();
+        setData(Data);
+        console.log(data);
+      }
+    } catch {
+      console.log("Fetching failed, server error");
+    }
+  }, [email]);
 
   const getDetails = useCallback(async () => {
     try {
@@ -60,7 +108,6 @@ export default function Home() {
       originalUrl: "https://another-example.com/another-long-url",
       shortUrl: "https://short.url/def456",
       created: "2024-03-15",
-      QRCode: "",
     },
     {
       originalUrl: "https://another-example.com/another-long-url",
@@ -78,7 +125,12 @@ export default function Home() {
 
   useEffect(() => {
     getDetails();
-  }, []);
+    getUrls();
+  }, [getDetails, getUrls]);
+
+  useEffect(() => {
+    console.log("Page rerendering...", data);
+  }, [data]);
 
   return (
     <>
@@ -119,7 +171,7 @@ export default function Home() {
             {/* Dropdown menu */}
             {dropdown && (
               <div
-                className="absolute top-full right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                className="absolute z-10   top-full right-0 mt-2 w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                 id="user-dropdown"
               >
                 {" "}
@@ -223,14 +275,80 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Table Section */}
-      <div className="overflow-x-auto mt-10 m-10 rounded-md">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 font-extrabold py-3 text-left text-md text-gray-500 uppercase tracking-wider"
+      {deletePopup && (
+        <div class="fixed inset-0 p-4  flex flex-wrap justify-center items-center w-full h-full z-[1000] before:fixed before:inset-0 before:w-full before:h-full before:bg-[rgba(0,0,0,0.5)] overflow-auto font-[sans-serif]">
+          <div class="w-full max-w-md shadow-lg rounded-md p-6 dark:bg-gray-700 relative">
+            <svg
+              onClick={openDeletePopup}
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-3.5 cursor-pointer shrink-0 fill-black hover:fill-red-500 float-right"
+              viewBox="0 0 320.591 320.591"
+            >
+              <path
+                d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
+                data-original="#000000"
+              ></path>
+              <path
+                d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
+                data-original="#000000"
+              ></path>
+            </svg>
+            <div class="my-8 text-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-16 fill-red-500 inline"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M19 7a1 1 0 0 0-1 1v11.191A1.92 1.92 0 0 1 15.99 21H8.01A1.92 1.92 0 0 1 6 19.191V8a1 1 0 0 0-2 0v11.191A3.918 3.918 0 0 0 8.01 23h7.98A3.918 3.918 0 0 0 20 19.191V8a1 1 0 0 0-1-1Zm1-3h-4V2a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v2H4a1 1 0 0 0 0 2h16a1 1 0 0 0 0-2ZM10 4V3h4v1Z"
+                  data-original="#000000"
+                />
+                <path
+                  d="M11 17v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Zm4 0v-7a1 1 0 0 0-2 0v7a1 1 0 0 0 2 0Z"
+                  data-original="#000000"
+                />
+              </svg>
+              <h4 className="text-xl font-semibold mt-6">
+                Are you sure you want to delete it?
+              </h4>
+              <p className="text-sm text-slate-400 mt-4">
+                Are you sure want to delete it ? These process is not reversible
+              </p>
+            </div>
+            <div class="flex flex-col space-y-2">
+              <button
+                type="button"
+                className="px-6 py-2.5 rounded-md text-white text-sm font-semibold border-none outline-none bg-red-500 hover:bg-red-600 active:bg-red-500"
+              >
+                Delete
+              </button>
+              <button
+                onClick={openDeletePopup}
+                type="button"
+                className="px-6 py-2.5 rounded-md text-black text-sm font-semibold border-none outline-none bg-gray-200 hover:bg-gray-300 active:bg-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="relative m-5 overflow-x-auto shadow-md sm:rounded-lg mt-10">
+        <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+          <div>
+            <button
+              id="dropdownRadioButton"
+              data-dropdown-toggle="dropdownRadio"
+              className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+              type="button"
+            >
+              <svg
+                className="w-3 h-3 text-gray-500 dark:text-gray-400 me-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
               >
                 Original URL
               </th>
@@ -239,12 +357,6 @@ export default function Home() {
                 className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
               >
                 Short URL
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-md font-bold text-gray-500 uppercase tracking-wider"
-              >
-                QR Code
               </th>
               <th
                 scope="col"
@@ -260,23 +372,13 @@ export default function Home() {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-gray-500 divide-y divide-gray-200">
+          <tbody className=" bg-gray-500 divide-y divide-gray-200">
             {data.map((item, index) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {item.originalUrl}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.shortUrl}</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    viewBox="0 -960 960 960"
-                    width="24"
-                  >
-                    <path d="M520-120v-80h80v80h-80Zm-80-80v-200h80v200h-80Zm320-120v-160h80v160h-80Zm-80-160v-80h80v80h-80Zm-480 80v-80h80v80h-80Zm-80-80v-80h80v80h-80Zm360-280v-80h80v80h-80ZM180-660h120v-120H180v120Zm-60 60v-240h240v240H120Zm60 420h120v-120H180v120Zm-60 60v-240h240v240H120Zm540-540h120v-120H660v120Zm-60 60v-240h240v240H600Zm80 480v-120h-80v-80h160v120h80v80H680ZM520-400v-80h160v80H520Zm-160 0v-80h-80v-80h240v80h-80v80h-80Zm40-200v-160h80v80h80v80H400Zm-190-90v-60h60v60h-60Zm0 480v-60h60v60h-60Zm480-480v-60h60v60h-60Z" />
-                  </svg>
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{item.created}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mx-2">
@@ -289,7 +391,6 @@ export default function Home() {
               </tr>
             ))}
           </tbody>
-
         </table>
       </div>
 
